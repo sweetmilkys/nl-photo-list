@@ -1,7 +1,7 @@
 import React from "react";
+import styled from "styled-components";
 
-const DetailPresenter = () => {
-  return <div>Detail</div>;
-};
+const Container = styled.div``;
 
+const DetailPresenter = () => <Container>Detail</Container>;
 export default DetailPresenter;

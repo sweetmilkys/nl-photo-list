@@ -1,7 +1,7 @@
 import React from "react";
+import styled from "styled-components";
 
-const ListPresenter = () => {
-  return <div>List</div>;
-};
+const Container = styled.div``;
 
+const ListPresenter = () => <Container>List</Container>;
 export default ListPresenter;

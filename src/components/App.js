@@ -1,8 +1,13 @@
 import React from "react";
 import Router from "./Router";
+import GlobalStyles from "Components/GlobalStyles";
+import "antd/dist/antd.css";
 
-function App() {
-  return <Router />;
-}
+const App = () => (
+  <>
+    <Router />
+    <GlobalStyles />
+  </>
+);
 
 export default App;

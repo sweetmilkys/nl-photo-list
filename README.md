@@ -8,6 +8,11 @@
 
 - React
 - react-router-dom
+- styled-components
+- styled-reset
+- antd
+- react-helmet
+- fontawesome(react-fontawesome,fontawesome-svg-core, free-solid-svg-icons)
 
 ### 필수구현사항
 
