@@ -1,8 +1,8 @@
 import React from "react";
-import Main from "../pages";
+import Router from "./Router";
 
 function App() {
-  return <Main />;
+  return <Router />;
 }
 
 export default App;
