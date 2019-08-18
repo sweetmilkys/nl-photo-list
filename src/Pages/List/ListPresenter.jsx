@@ -2,7 +2,7 @@ import React, { Fragment, useContext } from "react";
 import styled from "styled-components";
 import { DataContext } from "./ListContainer";
 import Helmet from "react-helmet";
-import { Checkbox, Divider } from "antd";
+import { Checkbox, Divider, BackTop } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFilter } from "@fortawesome/free-solid-svg-icons";
 import Photo from "Components/Photo";
@@ -99,6 +99,7 @@ const ListPresenter = ({ addComma }) => {
   } = useContext(DataContext);
   return (
     <Container>
+      <BackTop />
       <Helmet>
         <title>사진목록 | Nearthlab</title>
       </Helmet>
@@ -118,7 +119,9 @@ const ListPresenter = ({ addComma }) => {
       </FitlerBox>
       <Divider />
       <TotalCountBox>
-        <Count>{`전체 ${addComma(total)}개`}</Count>
+        <Count>{`전체 ${total
+          .toString()
+          .replace("/B(?=(d{3})+(?!d))/g", ",")}개`}</Count>
       </TotalCountBox>
       <ContentBox>
         {photos.map(
