@@ -11,7 +11,7 @@ import axios from "axios";
 import Loader from "Components/Loader";
 import Error from "Components/Error";
 import ListPresenter from "./ListPresenter";
-import { notification, Icon } from "antd";
+import { message, Icon } from "antd";
 
 export const DataContext = createContext({
   ladeltypes: [],
@@ -105,14 +105,6 @@ const ListContainer = ({ history, location: { search } }) => {
     }
   }, [ladeltypes, url]);
 
-  const LastPageNoti = memo(() => {
-    notification.open({
-      message: "Nearthlab",
-      description: "마지막 페이지 입니다 :)",
-      icon: <Icon type="smile" style={{ color: "#108ee9" }} />
-    });
-  });
-
   // Infinite Scroll 함수
   const onScroll = useCallback(() => {
     if (
@@ -126,10 +118,10 @@ const ListContainer = ({ history, location: { search } }) => {
           }photos?page=${meta.currentPage + 1}`
         );
       } else {
-        LastPageNoti();
+        message.warning("마지막 페이지 입니다 :)");
       }
     }
-  }, [LastPageNoti, meta.currentPage, meta.maxPage]);
+  }, [meta.currentPage, meta.maxPage]);
 
   // 스크롤 이벤트
   useEffect(() => {
@@ -142,6 +134,7 @@ const ListContainer = ({ history, location: { search } }) => {
     };
   }, [onScroll]);
 
+  // 3자리 콤마 계산 정규식
   const addComma = useCallback(num => {
     var regexp = /\B(?=(\d{3})+(?!\d))/g;
     return num.toString().replace(regexp, ",");
