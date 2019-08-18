@@ -1,8 +1,7 @@
-import React from "react";
+import React, { memo } from "react";
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 import { Card } from "antd";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faWrench } from "@fortawesome/free-solid-svg-icons";
 
 const Container = styled.li`
   width: 25%;
@@ -83,6 +82,17 @@ const CompleateBtn = () => (
 
 const ContentPhoto = styled(Card)``;
 
+const Img = styled.img`
+  height: 140px;
+
+  @media (max-width: 767px) {
+    height: 300px;
+  }
+  @media (min-width: 768px) and (max-width: 991px) {
+    height: 300px;
+  }
+`;
+
 const ContentInfoBox = styled.div`
   display: flex;
   align-items: center;
@@ -97,50 +107,52 @@ const ContentText = styled(Card.Meta)`
   }
 `;
 
-const NotFoundPage = () => (
-  <Container>
-    <ButtonBox>
-      <CheckBtn>{true ? <CompleateBtn /> : <InCompleateBtn />}</CheckBtn>
-    </ButtonBox>
-    <ContentPhoto
-      hoverable
-      cover={
-        <img
-          alt="example"
-          src="https://cdn.zeplin.io/5d4bb51c32e23e35167fcbbc/assets/E5A46FCF-299A-4E26-85FD-8F29DA7AC12F.png"
-        />
-      }
-    >
-      <ContentInfoBox>
-        <ContentText title={`파일 이름`} />
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="56"
-          height="18"
-          viewBox="0 0 56 18"
-        >
-          <g fill="none" fillRule="evenodd">
-            <rect width="56" height="18" fill="#E9EEF1" rx="9" />
-            <text
-              fill="#2A67E2"
-              fontFamily="NotoSansCJKkr-Medium, Noto Sans CJK KR"
-              fontSize="10"
-              fontWeight="400"
-              letterSpacing="-.278"
-            >
-              <tspan x="17" y="12.553">
-                {`라벨 ${8}개`}
-              </tspan>
-            </text>
-            <path
-              fill="#2A67E2"
-              d="M10.708 8.293l4.363 4.364-1.414 1.414-4.364-4.363a3 3 0 0 1-4.001-4.001l2 2 1.415-1.414-2-2a3 3 0 0 1 4.001 4.001z"
-            />
-          </g>
-        </svg>
-      </ContentInfoBox>
-    </ContentPhoto>
-  </Container>
+const LabelCount = ({ number }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="56"
+    height="18"
+    viewBox="0 0 56 18"
+  >
+    <g fill="none" fillRule="evenodd">
+      <rect width="56" height="18" fill="#E9EEF1" rx="9" />
+      <text
+        fill="#2A67E2"
+        fontFamily="NotoSansCJKkr-Medium, Noto Sans CJK KR"
+        fontSize="10"
+        fontWeight="400"
+        letterSpacing="-.278"
+      >
+        <tspan x="17" y="12.553">
+          {`라벨 ${number}개`}
+        </tspan>
+      </text>
+      <path
+        fill="#2A67E2"
+        d="M10.708 8.293l4.363 4.364-1.414 1.414-4.364-4.363a3 3 0 0 1-4.001-4.001l2 2 1.415-1.414-2-2a3 3 0 0 1 4.001 4.001z"
+      />
+    </g>
+  </svg>
 );
 
-export default NotFoundPage;
+const Photo = memo(
+  ({ id, photoUrl, photoTakenAt, createdAt, completed, labels }) => (
+    <Link to={`/photos/${id}`}>
+      <Container key={id}>
+        <ButtonBox>
+          <CheckBtn>
+            {completed ? <CompleateBtn /> : <InCompleateBtn />}
+          </CheckBtn>
+        </ButtonBox>
+        <ContentPhoto hoverable cover={<Img alt={id} src={photoUrl} />}>
+          <ContentInfoBox>
+            <ContentText title={photoUrl.split("/")[3]} />
+            <LabelCount number={labels ? labels.length : null} />
+          </ContentInfoBox>
+        </ContentPhoto>
+      </Container>
+    </Link>
+  )
+);
+
+export default Photo;

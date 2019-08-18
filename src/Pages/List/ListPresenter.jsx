@@ -1,5 +1,7 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useContext } from "react";
 import styled from "styled-components";
+import { DataContext } from "./ListContainer";
+import Helmet from "react-helmet";
 import { Checkbox, Divider } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFilter } from "@fortawesome/free-solid-svg-icons";
@@ -77,7 +79,6 @@ const FilterCheckBox = styled(Checkbox)`
     border: 1px solid ${props => props.theme.blue};
   }
 `;
-//<input type="checkbox" />
 
 const TotalCountBox = styled.div``;
 
@@ -90,36 +91,51 @@ const Count = styled.h2`
 
 const ContentBox = styled.ul``;
 
-const ListPresenter = () => (
-  <Container>
-    <FitlerBox>
-      <FilterHeader>
-        <FitlerIcon icon={faFilter} />
-        <FilterTitle>라벨 종류 선택</FilterTitle>
-      </FilterHeader>
-      <Filter>
-        {[
-          "단순 손상",
-          "페인트 벗겨짐",
-          "긴급 수리 필요",
-          "전문가 의뢰 필요"
-        ].map(item => (
-          <Fragment key={item}>
-            <FilterCheckBox />
-            {item}
-          </Fragment>
-        ))}
-      </Filter>
-    </FitlerBox>
-    <Divider />
-    <TotalCountBox>
-      <Count>{`전체 ${`3,127`}개`}</Count>
-    </TotalCountBox>
-    <ContentBox>
-      {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map(item => (
-        <Photo key={item} />
-      ))}
-    </ContentBox>
-  </Container>
-);
+const ListPresenter = ({ addComma }) => {
+  const {
+    ladeltypes,
+    meta: { total },
+    photos
+  } = useContext(DataContext);
+  return (
+    <Container>
+      <Helmet>
+        <title>사진목록 | Nearthlab</title>
+      </Helmet>
+      <FitlerBox>
+        <FilterHeader>
+          <FitlerIcon icon={faFilter} />
+          <FilterTitle>라벨 종류 선택</FilterTitle>
+        </FilterHeader>
+        <Filter>
+          {ladeltypes.map(({ id, title }) => (
+            <Fragment key={id}>
+              <FilterCheckBox />
+              {title}
+            </Fragment>
+          ))}
+        </Filter>
+      </FitlerBox>
+      <Divider />
+      <TotalCountBox>
+        <Count>{`전체 ${addComma(total)}개`}</Count>
+      </TotalCountBox>
+      <ContentBox>
+        {photos.map(
+          ({ id, photoUrl, photoTakenAt, createdAt, completed, labels }) => (
+            <Photo
+              key={id}
+              id={id}
+              photoUrl={photoUrl}
+              photoTakenAt={photoTakenAt}
+              createdAt={createdAt}
+              completed={completed}
+              labels={labels}
+            />
+          )
+        )}
+      </ContentBox>
+    </Container>
+  );
+};
 export default ListPresenter;
