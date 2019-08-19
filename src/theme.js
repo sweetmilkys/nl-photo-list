@@ -5,7 +5,8 @@ const theme = {
   gray: "#434959",
   ligthGray: "#727682",
   border: "#dfe3ea",
-  checkBox: "#cbd1e0"
+  checkBox: "#cbd1e0",
+  btnBlue: "#2a67e2"
 };
 
 export default theme;

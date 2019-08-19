@@ -8,8 +8,9 @@ export default () => (
   <Router>
     <Switch>
       <Route path="/" component={List} exact />
-      <Route path="/photos/:id" component={Detail} />
+      <Route path="/photos/:id" component={List} />
       <Route path="*" component={NotFoundPage} />
     </Switch>
+    <Route path="/photos/:id" component={Detail} />
   </Router>
 );
