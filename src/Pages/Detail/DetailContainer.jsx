@@ -1,6 +1,5 @@
 import React, {
   useEffect,
-  useRef,
   useMemo,
   useCallback,
   useReducer,
@@ -47,11 +46,9 @@ const DetailContainer = ({ history, match: { params } }) => {
     data,
     labels
   ]);
-  const completed = useRef();
 
   // Get a single photo
   useEffect(() => {
-    console.log("데이터");
     const getData = async () => {
       try {
         const { data: ladeltypes } = await axios.get(
@@ -60,7 +57,6 @@ const DetailContainer = ({ history, match: { params } }) => {
         const { data: photos } = await axios.get(
           `${process.env.REACT_APP_NEARTHLAB_API_URL}photos/${params.id}`
         );
-        console.log("확인", ladeltypes, photos);
         dispatch({
           type: GET_DATA,
           ladeltypes: ladeltypes,
@@ -86,13 +82,35 @@ const DetailContainer = ({ history, match: { params } }) => {
   );
 
   // 작업완료 버튼
-  const handleSwitch = useCallback((checked, event) => {
-    console.log("클릭?", checked, event);
-    completed.current = checked;
-    console.log(completed.current);
-  }, []);
+  const handleSwitch = useCallback(
+    (checked, _) => {
+      let storageArr = JSON.parse(localStorage.getItem("completed"))
+        ? JSON.parse(localStorage.getItem("completed"))
+        : [];
+      let getItem;
 
-  console.log("value", value);
+      // storage에서 값 가져오기
+      if (storageArr.length > 0) {
+        storageArr.forEach(item => {
+          if (data.id === item.id) {
+            getItem = item;
+          }
+        });
+      }
+      // storage에 없으면 추가
+      if (getItem === undefined) {
+        storageArr.push({ id: data.id, completed: checked });
+        // storage에 있으면 상태 변경
+      } else {
+        storageArr[
+          storageArr.findIndex(({ id }) => getItem.id === id)
+        ].completed = checked;
+      }
+
+      localStorage.setItem("completed", JSON.stringify(storageArr));
+    },
+    [data.id]
+  );
 
   return isLoading ? null : (
     <DataContext.Provider value={value}>

@@ -1,8 +1,6 @@
 import React, { useContext } from "react";
 import styled from "styled-components";
 import { Modal, Switch, Card, Descriptions } from "antd";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faWrench } from "@fortawesome/free-solid-svg-icons";
 import { DataContext } from "./DetailContainer";
 import Label from "Components/Label";
 
