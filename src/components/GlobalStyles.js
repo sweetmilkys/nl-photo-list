@@ -81,6 +81,12 @@ const globalStyles = createGlobalStyle`
     font-size: 14px !important;
     font-weight: 500 !important;
   }
+  .ant-descriptions-item-colon {
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    letter-spacing: -0.2px !important;
+    color: ${props => props.theme.ligthGray} !important;
+  }
 `;
 
 export default globalStyles;

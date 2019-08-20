@@ -10,7 +10,7 @@ import axios from "axios";
 import Loader from "Components/Loader";
 import Error from "Components/Error";
 import ListPresenter from "./ListPresenter";
-import { message, Icon } from "antd";
+import { message } from "antd";
 
 export const DataContext = createContext({
   ladeltypes: [],

@@ -135,24 +135,20 @@ const LabelCount = ({ number }) => (
   </svg>
 );
 
-const Photo = memo(
-  ({ id, photoUrl, photoTakenAt, createdAt, completed, labels }) => (
-    <Link to={`/photos/${id}`}>
-      <Container key={id}>
-        <ButtonBox>
-          <CheckBtn>
-            {completed ? <CompleateBtn /> : <InCompleateBtn />}
-          </CheckBtn>
-        </ButtonBox>
-        <ContentPhoto hoverable cover={<Img alt={id} src={photoUrl} />}>
-          <ContentInfoBox>
-            <ContentText title={photoUrl.split("/")[3]} />
-            <LabelCount number={labels ? labels.length : null} />
-          </ContentInfoBox>
-        </ContentPhoto>
-      </Container>
-    </Link>
-  )
-);
+const Photo = memo(({ id, photoUrl, completed, labels }) => (
+  <Link to={`/photos/${id}`}>
+    <Container key={id}>
+      <ButtonBox>
+        <CheckBtn>{completed ? <CompleateBtn /> : <InCompleateBtn />}</CheckBtn>
+      </ButtonBox>
+      <ContentPhoto hoverable cover={<Img alt={id} src={photoUrl} />}>
+        <ContentInfoBox>
+          <ContentText title={photoUrl.split("/")[3]} />
+          <LabelCount number={labels ? labels.length : null} />
+        </ContentInfoBox>
+      </ContentPhoto>
+    </Container>
+  </Link>
+));
 
 export default Photo;

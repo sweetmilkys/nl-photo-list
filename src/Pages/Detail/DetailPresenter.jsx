@@ -1,9 +1,10 @@
-import React from "react";
-import Helmet from "react-helmet";
+import React, { useContext } from "react";
 import styled from "styled-components";
 import { Modal, Switch, Card, Descriptions } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faWrench } from "@fortawesome/free-solid-svg-icons";
+import { DataContext } from "./DetailContainer";
+import Label from "Components/Label";
 
 const Container = styled.div``;
 
@@ -14,6 +15,10 @@ const Contant = styled.div`
 `;
 
 const PhotoBox = styled.div`
+  .ant-card-hoverable:hover {
+    border-color: none;
+    box-shadow: none;
+  }
   .ant-card-body {
     padding-left: 0 !important;
     padding-right: 0 !important;
@@ -47,89 +52,109 @@ const LabelHeader = styled.div`
   margin-bottom: 12px;
 `;
 
-const LabelIcon = styled(FontAwesomeIcon)`
-  color: ${props => props.theme.gray};
-`;
+const LabelIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="11"
+    height="11"
+    viewBox="0 0 11 11"
+  >
+    <g fill="none" fillRule="evenodd">
+      <path d="M-4-4h18v18H-4z" />
+      <path
+        fill="#727682"
+        d="M6.234 4.69L11 9.454 9.455 11 4.69 6.234a3.277 3.277 0 0 1-4.37-4.37l2.185 2.185L4.05 2.504 1.864.32a3.277 3.277 0 0 1 4.37 4.37z"
+      />
+    </g>
+  </svg>
+);
 
 const LabelTitle = styled.span`
-  margin-left: 8px;
+  padding-left: 5px;
   font-size: 14px;
+  font-weight: bold;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
   letter-spacing: -0.5px;
-  color: ${props => props.theme.gray};
+  color: ${props => props.theme.ligthGray};
 `;
 
-const LabelItem = styled(Card)`
-  width: 400;
-  height: 194;
-`;
+const DetailPresenter = ({ handleCancel, handleSwitch }) => {
+  const {
+    ladeltypes,
+    data: { id, photoUrl, photoTakenAt, createdAt, completed },
+    labels
+  } = useContext(DataContext);
 
-const DetailPresenter = ({ handleCancel, handleSwitch }) => (
-  <Container>
-    <Helmet>
-      <title>${"123.jpg"} 파일 상세 정보 | Nearthlab</title>
-    </Helmet>
-    <Modal
-      title="파일 상세 정보"
-      centered
-      visible={true}
-      onCancel={handleCancel}
-      width="710px"
-      footer={
-        <Switch
-          onChange={handleSwitch}
-          defaultChecked={true}
-          checkedChildren="완료"
-          unCheckedChildren="미완료"
-        />
-      }
-    >
-      <Contant>
-        <PhotoBox>
-          <Card
-            hoverable
-            style={{ width: 240, border: "none" }}
-            cover={
-              <Img
-                alt="example"
-                src="https://cdn.zeplin.io/5d4bb51c32e23e35167fcbbc/assets/EB9DB7A3-C1CD-4891-80B5-23A0138699F2.png"
+  return (
+    <Container>
+      <Modal
+        title="파일 상세 정보"
+        centered
+        visible={true}
+        onCancel={handleCancel}
+        width="710px"
+        footer={
+          <Switch
+            onChange={handleSwitch}
+            defaultChecked={completed}
+            checkedChildren="완료"
+            unCheckedChildren="미완료"
+          />
+        }
+      >
+        <Contant>
+          <PhotoBox>
+            <Card
+              hoverable
+              style={{ width: 240, border: "none" }}
+              cover={<Img alt={id} src={photoUrl} />}
+            >
+              {[
+                { label: "파일명", val: photoUrl.split("/")[3] },
+                {
+                  label: "촬영시간",
+                  val:
+                    photoTakenAt.split("T")[0].replace(/-/g, ".") +
+                    (photoTakenAt.split("T")[1].split(":")[0] < 12
+                      ? " 오전 "
+                      : " 오후 ") +
+                    photoTakenAt.split("T")[1].split(".")[0]
+                },
+                {
+                  label: "등록일",
+                  val:
+                    createdAt.split("T")[0].replace(/-/g, ".") +
+                    (createdAt.split("T")[1].split(":")[0] < 12
+                      ? " 오전 "
+                      : " 오후 ") +
+                    createdAt.split("T")[1].split(".")[0]
+                }
+              ].map(({ label, val }) => (
+                <Descriptions key={label}>
+                  <Descriptions.Item label={label}>{val}</Descriptions.Item>
+                </Descriptions>
+              ))}
+            </Card>
+          </PhotoBox>
+          <LabelBox>
+            <LabelHeader>
+              <LabelIcon />
+              <LabelTitle>라벨 정보</LabelTitle>
+            </LabelHeader>
+            {labels.map(({ id, typeId, description }) => (
+              <Label
+                key={id}
+                typeId={typeId}
+                type={ladeltypes.find(({ id }) => id === typeId).title}
+                description={description}
               />
-            }
-          >
-            <Descriptions>
-              <Descriptions.Item label="파일명">Zhou Maomao</Descriptions.Item>
-            </Descriptions>
-            <Descriptions>
-              <Descriptions.Item label="촬영시간">ZhouMaomao</Descriptions.Item>
-            </Descriptions>
-            <Descriptions>
-              <Descriptions.Item label="등록일">Zhou Maomao</Descriptions.Item>
-            </Descriptions>
-          </Card>
-        </PhotoBox>
-        <LabelBox>
-          <LabelHeader>
-            <LabelIcon icon={faWrench} />
-            <LabelTitle>라벨 정보</LabelTitle>
-          </LabelHeader>
-          {[1, 3, 4].map(item => (
-            <LabelItem key={item}>
-              <h2>{`Label #${item}`}</h2>
-              <Descriptions>
-                <Descriptions.Item label="유형">단순 손상</Descriptions.Item>
-              </Descriptions>
-              <Descriptions>
-                <Descriptions.Item label="설명">
-                  Leading Edge에 매우 초기Scratches 발생 - 조치 제안: 블레이드의
-                  구조적인 문제는 야기하지 않으며, 운전에 영향을 미지치 않음.
-                  지속적인 상태모니터링과 향후 예방정비 사항이 될 수 있음을
-                  인지하는 것으로 충분함(Preventive Maintenance Routine_PMR)
-                </Descriptions.Item>
-              </Descriptions>
-            </LabelItem>
-          ))}
-        </LabelBox>
-      </Contant>
-    </Modal>
-  </Container>
-);
+            ))}
+          </LabelBox>
+        </Contant>
+      </Modal>
+    </Container>
+  );
+};
 export default DetailPresenter;
