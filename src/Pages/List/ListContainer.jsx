@@ -139,13 +139,18 @@ const ListContainer = ({ history, location: { search } }) => {
     return num.toString().replace(regexp, ",");
   }, []);
 
+  const completedList = useMemo(() => {
+    let completedList = JSON.parse(localStorage.getItem("completed"));
+    return completedList;
+  }, []);
+
   return isLoading ? (
     <Loader />
   ) : isError ? (
     <Error />
   ) : (
     <DataContext.Provider value={value}>
-      <ListPresenter addComma={addComma} />
+      <ListPresenter addComma={addComma} completedList={completedList} />
     </DataContext.Provider>
   );
 };

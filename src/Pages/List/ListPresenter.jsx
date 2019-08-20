@@ -91,12 +91,13 @@ const Count = styled.h2`
 
 const ContentBox = styled.ul``;
 
-const ListPresenter = ({ addComma }) => {
+const ListPresenter = ({ addComma, completedList }) => {
   const {
     ladeltypes,
     meta: { total },
     photos
   } = useContext(DataContext);
+
   return (
     <Container>
       <BackTop />
@@ -132,7 +133,12 @@ const ListPresenter = ({ addComma }) => {
               photoUrl={photoUrl}
               photoTakenAt={photoTakenAt}
               createdAt={createdAt}
-              completed={completed}
+              completed={
+                completedList !== null &&
+                completedList.find(item => id === item.id) !== undefined
+                  ? completedList.find(item => id === item.id).completed
+                  : completed
+              }
               labels={labels}
             />
           )

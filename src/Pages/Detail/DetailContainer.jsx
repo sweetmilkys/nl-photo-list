@@ -26,6 +26,15 @@ const initialState = {
 const reducer = (state, action) => {
   switch (action.type) {
     case GET_DATA:
+      const completedList = JSON.parse(localStorage.getItem("completed"));
+      // localstorage에 데이터 있을 경우 상태 반영
+      if (completedList) {
+        action.photos.completed = completedList.find(
+          item => action.photos.id === item.id
+        )
+          ? completedList.find(item => action.photos.id === item.id).completed
+          : action.photos.completed;
+      }
       return {
         ...state,
         isLoading: false,
@@ -57,6 +66,7 @@ const DetailContainer = ({ history, match: { params } }) => {
         const { data: photos } = await axios.get(
           `${process.env.REACT_APP_NEARTHLAB_API_URL}photos/${params.id}`
         );
+
         dispatch({
           type: GET_DATA,
           ladeltypes: ladeltypes,
@@ -106,10 +116,11 @@ const DetailContainer = ({ history, match: { params } }) => {
           storageArr.findIndex(({ id }) => getItem.id === id)
         ].completed = checked;
       }
-
       localStorage.setItem("completed", JSON.stringify(storageArr));
+      // 새로고침
+      history.go(0);
     },
-    [data.id]
+    [data.id, history]
   );
 
   return isLoading ? null : (
