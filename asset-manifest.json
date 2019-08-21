@@ -1,0 +1,17 @@
+{
+  "files": {
+    "main.js": "/nl-photo-list/static/js/main.ee371808.chunk.js",
+    "main.js.map": "/nl-photo-list/static/js/main.ee371808.chunk.js.map",
+    "runtime~main.js": "/nl-photo-list/static/js/runtime~main.934d3589.js",
+    "runtime~main.js.map": "/nl-photo-list/static/js/runtime~main.934d3589.js.map",
+    "static/css/2.e8d046a2.chunk.css": "/nl-photo-list/static/css/2.e8d046a2.chunk.css",
+    "static/js/2.f09872b2.chunk.js": "/nl-photo-list/static/js/2.f09872b2.chunk.js",
+    "static/js/2.f09872b2.chunk.js.map": "/nl-photo-list/static/js/2.f09872b2.chunk.js.map",
+    "index.html": "/nl-photo-list/index.html",
+    "precache-manifest.f1586bb7832f694619d8160cbb06c444.js": "/nl-photo-list/precache-manifest.f1586bb7832f694619d8160cbb06c444.js",
+    "service-worker.js": "/nl-photo-list/service-worker.js",
+    "static/css/2.e8d046a2.chunk.css.map": "/nl-photo-list/static/css/2.e8d046a2.chunk.css.map",
+    "static/media/404.png": "/nl-photo-list/static/media/404.f68a5ca7.png",
+    "static/media/lighthouse.png": "/nl-photo-list/static/media/lighthouse.64af4a9f.png"
+  }
+}
