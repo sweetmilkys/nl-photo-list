@@ -4,7 +4,8 @@ import React, {
   useMemo,
   useCallback,
   useReducer,
-  createContext
+  createContext,
+  useRef
 } from "react";
 import axios from "axios";
 import Loader from "Components/Loader";
@@ -39,6 +40,12 @@ const reducer = (state, action) => {
         ...state,
         isLoading: false,
         meta: action.meta,
+        photos: action.photos
+      };
+    case FETCH_DATA:
+      return {
+        ...state,
+        meta: action.meta,
         photos: [...state.photos, ...action.photos]
       };
     case API_FAILURE:
@@ -50,12 +57,10 @@ const reducer = (state, action) => {
 
 export const GET_LABEL_TYPES = "GET_LABEL_TYPES";
 export const GET_DATA = "GET_DATA";
+export const FETCH_DATA = "FETCH_DATA";
 export const API_FAILURE = "API_FAILURE";
 
 const ListContainer = ({ history, location: { search } }) => {
-  const [url, setUrl] = useState(
-    `${process.env.REACT_APP_NEARTHLAB_API_URL}photos`
-  );
   const [state, dispatch] = useReducer(reducer, initialState);
   const { isLoading, isError, meta, ladeltypes, photos } = state;
   const value = useMemo(() => ({ ladeltypes, meta, photos, dispatch }), [
@@ -63,6 +68,13 @@ const ListContainer = ({ history, location: { search } }) => {
     meta,
     photos
   ]);
+  const [url, setUrl] = useState(
+    `${process.env.REACT_APP_NEARTHLAB_API_URL}photos`
+  );
+  const label1 = useRef(false);
+  const label2 = useRef(false);
+  const label3 = useRef(false);
+  const label4 = useRef(false);
 
   // Get label types
   const getLabels = async () => {
@@ -86,8 +98,9 @@ const ListContainer = ({ history, location: { search } }) => {
         const {
           data: { meta, photos }
         } = await axios.get(url);
+
         dispatch({
-          type: GET_DATA,
+          type: meta.currentPage === 1 ? GET_DATA : FETCH_DATA,
           meta,
           photos
         });
@@ -114,7 +127,11 @@ const ListContainer = ({ history, location: { search } }) => {
         setUrl(
           `${
             process.env.REACT_APP_NEARTHLAB_API_URL
-          }photos?page=${meta.currentPage + 1}`
+          }photos?page=${meta.currentPage + 1}${
+            label1.current ? "&labelTypeIds[]=1" : ""
+          }${label2.current ? "&labelTypeIds[]=2" : ""}${
+            label3.current ? "&labelTypeIds[]=3" : ""
+          }${label4.current ? "&labelTypeIds[]=4" : ""}`
         );
       } else {
         message.warning("마지막 페이지 입니다 :)");
@@ -144,13 +161,45 @@ const ListContainer = ({ history, location: { search } }) => {
     return completedList;
   }, []);
 
+  // 라벨 종류 선택에 따른 API URL 주소 세팅
+  const onClickFilter = e => {
+    switch (e.currentTarget.value) {
+      case "1":
+        label1.current = e.currentTarget.checked;
+        break;
+      case "2":
+        label2.current = e.currentTarget.checked;
+        break;
+      case "3":
+        label3.current = e.currentTarget.checked;
+        break;
+      case "4":
+        label4.current = e.currentTarget.checked;
+        break;
+      default:
+        break;
+    }
+    setUrl(
+      `${process.env.REACT_APP_NEARTHLAB_API_URL}photos?page=1${
+        label1.current ? "&labelTypeIds[]=1" : ""
+      }${label2.current ? "&labelTypeIds[]=2" : ""}${
+        label3.current ? "&labelTypeIds[]=3" : ""
+      }${label4.current ? "&labelTypeIds[]=4" : ""}`
+    );
+    history.push("/");
+  };
+
   return isLoading ? (
     <Loader />
   ) : isError ? (
     <Error />
   ) : (
     <DataContext.Provider value={value}>
-      <ListPresenter addComma={addComma} completedList={completedList} />
+      <ListPresenter
+        addComma={addComma}
+        completedList={completedList}
+        onClickFilter={onClickFilter}
+      />
     </DataContext.Provider>
   );
 };

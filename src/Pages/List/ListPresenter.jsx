@@ -91,7 +91,7 @@ const Count = styled.h2`
 
 const ContentBox = styled.ul``;
 
-const ListPresenter = ({ addComma, completedList }) => {
+const ListPresenter = ({ addComma, completedList, onClickFilter }) => {
   const {
     ladeltypes,
     meta: { total },
@@ -112,7 +112,7 @@ const ListPresenter = ({ addComma, completedList }) => {
         <Filter>
           {ladeltypes.map(({ id, title }) => (
             <Fragment key={id}>
-              <FilterCheckBox />
+              <FilterCheckBox onClick={onClickFilter} value={id} />
               {title}
             </Fragment>
           ))}
